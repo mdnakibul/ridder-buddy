@@ -1,39 +1,83 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import firebase from "firebase/app";
+import "firebase/auth";
+import firebaseConfig from '../Login/firebase.config';
 
 const SignUp = () => {
+    if (firebase.apps.length === 0) {
+        firebase.initializeApp(firebaseConfig);
+    }
+let history = useHistory()
+    const handleSignUp = () => {
+        const nameField = document.getElementById('name');
+        const usersName = nameField.value;
+        const emailField = document.getElementById('email');
+        const email = emailField.value;
+        const passwordField = document.getElementById('password');
+        const password = passwordField.value;
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Signed in 
+                var userInfo = userCredential.user;
+                console.log('User Created', userInfo)
+                updateUserName(usersName);
+                history.push('/login')
+                // ...
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    }
+
+    const updateUserName = name => {
+        var user = firebase.auth().currentUser;
+    
+        user.updateProfile({
+          displayName: name,
+        }).then(function () {
+          // Update successful.
+          console.log('User name updated successfully');
+        }).catch(function (error) {
+          // An error happened.
+          console.log(error);
+        });
+      }
     return (
         <div className="container">
             <div className="form-container">
                 <h2>Sign Up</h2>
                 <form className="login-form">
-                <div class="form-group">
-                        <label for="exampleInputEmail1">Name</label>
-                        <input type="text" class="form-control" id="name" aria-describedby="Name" placeholder="Your Name" />
+                    <div className="form-group">
+                        <label htmlFor="exampleInputEmail1">Name</label>
+                        <input type="text" className="form-control" id="name" aria-describedby="Name" placeholder="Your Name" />
                     </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password" />
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmpass" placeholder="Confirm Password" />
+                    <div className="form-group">
+                        <label htmlFor="exampleInputEmail1">Email address</label>
+                        <input type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
+                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
 
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-                            <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+                    <div className="form-group">
+                        <label htmlFor="exampleInputPassword1">Password</label>
+                        <input type="password" className="form-control" id="password" placeholder="Password" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                        <input type="password" className="form-control" id="confirmpass" placeholder="Confirm Password" />
                     </div>
 
-                    <button type="button" class="btn btn-primary">Submit</button>
+                    <div className="form-check">
+                        <input type="checkbox" className="form-check-input" id="exampleCheck1" />
+                        <label className="form-check-label" htmlFor="exampleCheck1">Remember Me</label>
+                    </div>
+
+                    <button type="button" className="btn btn-primary" onClick={handleSignUp}>Submit</button>
 
                     <p>Already have an account? <Link to="/login"> Login </Link>  </p>
+
+                    <h3 className="text-center">Or</h3>
+                    <button className="btn btn-primary d-block m-auto">    <i className="fab fa-google"></i>  Continue with Google</button>
                 </form>
             </div>
         </div>
