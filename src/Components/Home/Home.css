@@ -1,0 +1,10 @@
+section{
+    background-image: url('../../images/background.png');
+    min-height: 100vh;
+    padding-top: 30px;
+}
+.nav-link{
+    color: #2D2D2D !important;
+    font-weight: 600;
+    font-size: 17px;
+}
