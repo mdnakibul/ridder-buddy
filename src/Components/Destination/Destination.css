@@ -50,3 +50,16 @@ form.pickup-form input[type = "submit"]{
 .rent-block-left img{
     max-width: 30px;
 }
+.map-frame{
+    border: 0px;
+    width: 600px;
+    margin-top: 10px;
+}
+
+/* Responsive Design  */
+
+@media only screen and (max-width: 600px) {
+    .map-frame {
+      max-width: 100%;
+    }
+  }
