@@ -12,11 +12,18 @@ let history = useHistory()
     const handleSignUp = () => {
         const nameField = document.getElementById('name');
         const usersName = nameField.value;
+        const isNameValid = usersName.length >= 3;
         const emailField = document.getElementById('email');
         const email = emailField.value;
         const passwordField = document.getElementById('password');
         const password = passwordField.value;
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+        const confirmPassField = document.getElementById('confirmpass');
+        const confirmPass = confirmPassField.value;
+        const isPassMatch = password === confirmPass;
+        const isPassPaternValid = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
+        const isPasswordValid = isPassMatch && isPassPaternValid;
+        if(isNameValid && isPasswordValid){
+            firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Signed in 
                 var userInfo = userCredential.user;
@@ -28,6 +35,15 @@ let history = useHistory()
             .catch((error) => {
                 console.log(error.message);
             });
+        }else{
+           if(!isNameValid){
+               alert('Your User Name is invalid. It should contain at least 3 character')
+           }else if(!isPassPaternValid){
+               alert('Password is not valid. Password should have at least 8 character , one number, one letter');
+           }else if(!isPassMatch){
+            alert('Password and confirm password does not match')
+           }
+        }
     }
 
     const updateUserName = name => {

@@ -45,7 +45,7 @@ const Destination = () => {
                             <div className="rent-container">
                                 <div className="destination">
                                     <ul>
-                                        <li>{destination.pickfrom}</li>
+                                        <li>{destination.pickfrom} to</li>
                                         <li>{destination.pickto}</li>
                                     </ul>
                                 </div>
